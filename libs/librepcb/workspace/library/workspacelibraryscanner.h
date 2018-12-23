@@ -27,6 +27,8 @@
 
 #include <QtCore>
 
+#include <memory>
+
 /*******************************************************************************
  *  Namespace / Forward Declarations
  ******************************************************************************/
@@ -83,10 +85,12 @@ signals:
   void failed(QString errorMsg);
 
 private:  // Methods
-  void run() noexcept override;
-  void clearAllTables(SQLiteDatabase& db);
-  int  addLibraryToDb(SQLiteDatabase&                         db,
-                      const QSharedPointer<library::Library>& lib);
+  void                                       run() noexcept override;
+  void                                       clearAllTables(SQLiteDatabase& db);
+  QVector<std::shared_ptr<library::Library>> getLibrariesOfDirectory(
+      const FilePath& dir) noexcept;
+  int addLibraryToDb(SQLiteDatabase&                          db,
+                     const std::shared_ptr<library::Library>& lib);
   template <typename ElementType>
   int addCategoriesToDb(SQLiteDatabase& db, const QList<FilePath>& dirs,
                         const QString& table, const QString& idColumn,

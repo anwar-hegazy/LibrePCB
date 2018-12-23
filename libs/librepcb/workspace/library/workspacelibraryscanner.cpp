@@ -77,11 +77,6 @@ void WorkspaceLibraryScanner::run() noexcept {
     mAbort = false;
     emit started();
 
-    // get a list of all available libraries
-    QList<QSharedPointer<library::Library>> libraries;
-    libraries.append(mWorkspace.getLocalLibraries().values());
-    libraries.append(mWorkspace.getRemoteLibraries().values());
-
     // open SQLite database
     FilePath dbFilePath =
         mWorkspace.getLibrariesPath().getPathTo("cache.sqlite");
@@ -93,10 +88,15 @@ void WorkspaceLibraryScanner::run() noexcept {
     // clear all tables
     clearAllTables(db);
 
+    // get all available libraries
+    QVector<std::shared_ptr<Library>> libraries;
+    libraries += getLibrariesOfDirectory(mWorkspace.getLocalLibrariesPath());
+    libraries += getLibrariesOfDirectory(mWorkspace.getRemoteLibrariesPath());
+
     // scan all libraries
     int   count   = 0;
     qreal percent = 0;
-    foreach (const QSharedPointer<Library>& lib, libraries) {
+    foreach (const std::shared_ptr<Library>& lib, libraries) {
       int libId = addLibraryToDb(db, lib);
       if (mAbort) break;
       count += addCategoriesToDb<ComponentCategory>(
@@ -171,16 +171,38 @@ void WorkspaceLibraryScanner::clearAllTables(SQLiteDatabase& db) {
   db.clearTable("devices");
 }
 
+QVector<std::shared_ptr<library::Library>>
+WorkspaceLibraryScanner::getLibrariesOfDirectory(const FilePath& dir) noexcept {
+  QVector<std::shared_ptr<library::Library>> libraries;
+  foreach (const QString& name,
+           QDir(dir.toStr()).entryList(QDir::AllDirs | QDir::NoDotAndDotDot)) {
+    FilePath libDirPath = dir.getPathTo(name);
+    if (Library::isValidElementDirectory<Library>(libDirPath)) {
+      try {
+        libraries.append(std::make_shared<Library>(libDirPath, true));
+      } catch (Exception& e) {
+        qCritical() << "Could not open workspace library!";
+        qCritical() << "Library:" << libDirPath.toNative();
+        qCritical() << "Error:" << e.getMsg();
+      }
+    } else {
+      qWarning() << "Directory is not a valid libary:" << libDirPath.toNative();
+    }
+  }
+  return libraries;
+}
+
 int WorkspaceLibraryScanner::addLibraryToDb(
-    SQLiteDatabase& db, const QSharedPointer<library::Library>& lib) {
+    SQLiteDatabase& db, const std::shared_ptr<library::Library>& lib) {
   QSqlQuery query = db.prepareQuery(
       "INSERT INTO libraries "
-      "(filepath, uuid, version) VALUES "
-      "(:filepath, :uuid, :version)");
+      "(filepath, uuid, version, icon_png) VALUES "
+      "(:filepath, :uuid, :version, :icon_png)");
   query.bindValue(":filepath",
                   lib->getFilePath().toRelative(mWorkspace.getLibrariesPath()));
   query.bindValue(":uuid", lib->getUuid().toStr());
   query.bindValue(":version", lib->getVersion().toStr());
+  query.bindValue(":icon_png", lib->getIcon());
   int id = db.insert(query);
   foreach (const QString& locale, lib->getAllAvailableLocales()) {
     QSqlQuery query = db.prepareQuery(

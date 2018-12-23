@@ -27,6 +27,7 @@
 
 #include <librepcb/common/network/networkrequest.h>
 #include <librepcb/library/library.h>
+#include <librepcb/workspace/library/workspacelibrarydb.h>
 #include <librepcb/workspace/workspace.h>
 
 #include <QtCore>
@@ -86,6 +87,9 @@ RepositoryLibraryListWidgetItem::RepositoryLibraryListWidgetItem(
 
   // check if this library is already installed
   updateInstalledStatus();
+  connect(&mWorkspace.getLibraryDb(),
+          &workspace::WorkspaceLibraryDb::scanSucceeded, this,
+          &RepositoryLibraryListWidgetItem::updateInstalledStatus);
 }
 
 RepositoryLibraryListWidgetItem::~RepositoryLibraryListWidgetItem() noexcept {
@@ -113,13 +117,24 @@ void RepositoryLibraryListWidgetItem::setChecked(bool checked) noexcept {
 
 void RepositoryLibraryListWidgetItem::updateInstalledStatus() noexcept {
   if (mUuid) {
-    QSharedPointer<library::Library> lib =
-        mWorkspace.getLibrary(*mUuid, true, true);
-    if (lib) {
+    tl::optional<Version> installedVersion;
+    try {
+      FilePath fp =
+          mWorkspace.getLibraryDb().getLatestLibrary(*mUuid);  // can throw
+      if (fp.isValid()) {
+        Version v = Version::fromString("0.1");  // only for initialization
+        mWorkspace.getLibraryDb().getElementMetadata<Library>(fp, nullptr,
+                                                              &v);  // can throw
+        installedVersion = v;
+      }
+    } catch (const Exception& e) {
+      qCritical() << "Could not determine if library is installed.";
+    }
+    if (installedVersion) {
       mUi->lblInstalledVersion->setText(
-          QString(tr("Installed: v%1")).arg(lib->getVersion().toStr()));
+          QString(tr("Installed: v%1")).arg(installedVersion->toStr()));
       mUi->lblInstalledVersion->setVisible(true);
-      if (lib->getVersion() < mVersion) {
+      if (installedVersion < mVersion) {
         mUi->lblInstalledVersion->setStyleSheet("QLabel {color: red;}");
         mUi->cbxDownload->setText(tr("Update"));
         mUi->cbxDownload->setVisible(true);
@@ -190,21 +205,7 @@ void RepositoryLibraryListWidgetItem::downloadFinished(
   Q_ASSERT(mLibraryDownload);
 
   if (success) {
-    try {
-      // if the library exists already in the workspace, remove it first
-      QString libDirName = mLibraryDownload->getDestinationDir().getFilename();
-      if (mWorkspace.getRemoteLibraries().contains(libDirName)) {
-        mWorkspace.removeRemoteLibrary(libDirName, false);  // can throw
-      }
-
-      // add downloaded library to workspace
-      mWorkspace.addRemoteLibrary(libDirName);  // can throw
-
-      // finish
-      emit libraryAdded(mLibraryDownload->getDestinationDir(), false);
-    } catch (const Exception& e) {
-      QMessageBox::critical(this, tr("Download failed"), e.getMsg());
-    }
+    emit libraryAdded(mLibraryDownload->getDestinationDir(), false);
   } else if (!errMsg.isEmpty()) {
     QMessageBox::critical(this, tr("Download failed"), errMsg);
   }

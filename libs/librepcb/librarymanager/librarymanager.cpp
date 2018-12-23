@@ -102,18 +102,29 @@ void LibraryManager::loadLibraryList() noexcept {
   QList<LibraryListWidgetItem*> widgets;
 
   // add the "Add new library" item
-  widgets.append(new LibraryListWidgetItem(mWorkspace,
-                                           QSharedPointer<library::Library>()));
+  widgets.append(new LibraryListWidgetItem(mWorkspace, FilePath()));
 
   // add all existing libraries
-  QList<QSharedPointer<library::Library>> libraries;
-  libraries.append(mWorkspace.getLocalLibraries().values());
-  libraries.append(mWorkspace.getRemoteLibraries().values());
-  foreach (const QSharedPointer<library::Library>& lib, libraries) {
-    LibraryListWidgetItem* widget = new LibraryListWidgetItem(mWorkspace, lib);
-    connect(widget, &LibraryListWidgetItem::openLibraryEditorTriggered, this,
-            &LibraryManager::openLibraryEditorTriggered);
-    widgets.append(widget);
+  try {
+    QMultiMap<Version, FilePath> libraries =
+        mWorkspace.getLibraryDb().getLibraries();  // can throw
+
+    foreach (const FilePath& libDir, libraries) {
+      QString name, description, keywords;
+      mWorkspace.getLibraryDb().getElementTranslations<Library>(
+          libDir, mWorkspace.getSettings().getLibLocaleOrder().getLocaleOrder(),
+          &name, &description, &keywords);  // can throw
+      QPixmap icon;
+      mWorkspace.getLibraryDb().getLibraryMetadata(libDir, &icon);  // can throw
+
+      LibraryListWidgetItem* widget = new LibraryListWidgetItem(
+          mWorkspace, libDir, name, description, icon);
+      connect(widget, &LibraryListWidgetItem::openLibraryEditorTriggered, this,
+              &LibraryManager::openLibraryEditorTriggered);
+      widgets.append(widget);
+    }
+  } catch (const Exception& e) {
+    QMessageBox::critical(this, tr("Could not load library list"), e.getMsg());
   }
 
   // sort all list widget items
@@ -143,15 +154,19 @@ void LibraryManager::currentListItemChanged(
   if (current) {
     LibraryListWidgetItem* item = dynamic_cast<LibraryListWidgetItem*>(
         mUi->lstLibraries->itemWidget(current));
-    if (item && (!item->getLibrary().isNull())) {
-      QSharedPointer<library::Library> lib = item->getLibrary();
-      LibraryInfoWidget* widget = new LibraryInfoWidget(mWorkspace, lib);
-      connect(widget, &LibraryInfoWidget::openLibraryEditorTriggered, this,
-              &LibraryManager::openLibraryEditorTriggered);
-      connect(widget, &LibraryInfoWidget::libraryRemoved, this,
-              &LibraryManager::libraryRemovedSlot);
-      mUi->verticalLayout->insertWidget(0, widget);
-      mCurrentWidget = widget;
+    if (item && item->getLibraryFilePath().isValid()) {
+      try {
+        LibraryInfoWidget* widget = new LibraryInfoWidget(
+            mWorkspace, item->getLibraryFilePath());  // can throw
+        connect(widget, &LibraryInfoWidget::openLibraryEditorTriggered, this,
+                &LibraryManager::openLibraryEditorTriggered);
+        connect(widget, &LibraryInfoWidget::libraryRemoved, this,
+                &LibraryManager::libraryRemovedSlot);
+        mUi->verticalLayout->insertWidget(0, widget);
+        mCurrentWidget = widget;
+      } catch (const Exception& e) {
+        QMessageBox::critical(this, tr("Error"), e.getMsg());
+      }
     }
   } else {
     mCurrentWidget = new QWidget();
@@ -174,19 +189,28 @@ void LibraryManager::libraryAddedSlot(const FilePath& libDir,
       Q_ASSERT(item);
       LibraryListWidgetItem* widget = dynamic_cast<LibraryListWidgetItem*>(
           mUi->lstLibraries->itemWidget(item));
-      if (widget && widget->getLibrary() &&
-          widget->getLibrary()->getFilePath() == libDir) {
+      if (widget && (widget->getLibraryFilePath() == libDir)) {
         mUi->lstLibraries->setCurrentItem(item);
         break;
       }
     }
   }
+
+  // start library scan
+  mWorkspace.getLibraryDb().startLibraryRescan();
 }
 
 void LibraryManager::libraryRemovedSlot(const FilePath& libDir) noexcept {
   Q_UNUSED(libDir);
-  clearLibraryList();
-  loadLibraryList();
+  for (int i = mUi->lstLibraries->count() - 1; i >= 0; i--) {
+    QListWidgetItem*       item   = mUi->lstLibraries->item(i);
+    LibraryListWidgetItem* widget = dynamic_cast<LibraryListWidgetItem*>(item);
+    Q_ASSERT(widget);
+    if (widget && (widget->getLibraryFilePath() == libDir)) {
+      delete mUi->lstLibraries->itemWidget(item);
+      delete item;
+    }
+  }
   mAddLibraryWidget->updateInstalledStatusOfRepositoryLibraries();
 }
 
@@ -202,9 +226,9 @@ bool LibraryManager::widgetsLessThan(const LibraryListWidgetItem* a,
   } else if (a->isRemoteLibrary() && !b->isRemoteLibrary()) {
     return false;
   } else {
-    if (a->getLibrary().isNull()) {
+    if (!a->getLibraryFilePath().isValid()) {
       return true;
-    } else if (b->getLibrary().isNull()) {
+    } else if (!b->getLibraryFilePath().isValid()) {
       return false;
     } else {
       return a->getName().toLower() < b->getName().toLower();

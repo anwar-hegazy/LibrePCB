@@ -89,7 +89,7 @@ private:  // Methods
                               const LibraryListWidgetItem* b) noexcept;
 
 signals:
-  void openLibraryEditorTriggered(QSharedPointer<Library> lib);
+  void openLibraryEditorTriggered(const FilePath& libDir);
 
 private:  // Data
   workspace::Workspace&              mWorkspace;

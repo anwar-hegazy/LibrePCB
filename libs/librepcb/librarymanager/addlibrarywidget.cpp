@@ -266,9 +266,6 @@ void AddLibraryWidget::createLocalLibraryButtonClicked() noexcept {
       qCritical() << "Could not copy the .gitattributes file:" << e.getMsg();
     }
 
-    // add the new library to the workspace
-    mWorkspace.addLocalLibrary(directory.getFilename());  // can throw
-
     // library successfully added! reset input fields and emit signal
     mUi->edtLocalName->clear();
     mUi->edtLocalDescription->clear();
@@ -344,17 +341,8 @@ void AddLibraryWidget::downloadZipFinished(bool           success,
   Q_ASSERT(mManualLibraryDownload);
 
   if (success) {
-    try {
-      // add library to workspace
-      mWorkspace.addLocalLibrary(
-          mManualLibraryDownload->getDestinationDir().getFilename());
-
-      // finish
-      mUi->lblDownloadZipStatusMsg->setText("");
-      emit libraryAdded(mManualLibraryDownload->getDestinationDir(), true);
-    } catch (const Exception& e) {
-      mUi->lblDownloadZipStatusMsg->setText(e.getMsg());
-    }
+    mUi->lblDownloadZipStatusMsg->setText("");
+    emit libraryAdded(mManualLibraryDownload->getDestinationDir(), true);
   } else {
     mUi->lblDownloadZipStatusMsg->setText(errMsg);
   }

@@ -206,7 +206,7 @@ private:
       noexcept;
 
   // Library Management
-  void openLibraryEditor(QSharedPointer<library::Library> lib) noexcept;
+  void openLibraryEditor(const FilePath& libDir) noexcept;
   void libraryEditorDestroyed() noexcept;
 
   /**

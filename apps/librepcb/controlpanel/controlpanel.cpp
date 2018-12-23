@@ -95,16 +95,16 @@ ControlPanel::ControlPanel(Workspace& workspace)
   mUi->lblWarnForNewerAppVersions->setVisible(highestVersion > actualVersion);
 
   // decide if we have to show the warning about missing workspace libraries
-  if (mWorkspace.getLocalLibraries().isEmpty() &&
-      mWorkspace.getRemoteLibraries().isEmpty()) {
-    mUi->lblWarnForNoLibraries->setVisible(true);
-    connect(mUi->lblWarnForNoLibraries, &QLabel::linkActivated, this,
-            &ControlPanel::on_actionOpen_Library_Manager_triggered);
-    connect(&mWorkspace, &Workspace::libraryAdded, mUi->lblWarnForNoLibraries,
-            &QLabel::hide);
-  } else {
-    mUi->lblWarnForNoLibraries->setVisible(false);
-  }
+  // if (mWorkspace.getLocalLibraries().isEmpty() &&
+  //    mWorkspace.getRemoteLibraries().isEmpty()) {
+  //  mUi->lblWarnForNoLibraries->setVisible(true);
+  //  connect(mUi->lblWarnForNoLibraries, &QLabel::linkActivated, this,
+  //          &ControlPanel::on_actionOpen_Library_Manager_triggered);
+  //  connect(&mWorkspace, &Workspace::libraryAdded, mUi->lblWarnForNoLibraries,
+  //          &QLabel::hide);
+  //} else {
+  //  mUi->lblWarnForNoLibraries->setVisible(false);
+  //}
 
   // connect some actions which are created with the Qt Designer
   connect(mUi->actionQuit, &QAction::triggered, this, &ControlPanel::close);
@@ -371,23 +371,22 @@ ProjectEditor* ControlPanel::getOpenProject(const FilePath& filepath) const
  *  Library Management
  ******************************************************************************/
 
-void ControlPanel::openLibraryEditor(
-    QSharedPointer<library::Library> lib) noexcept {
-  using library::editor::LibraryEditor;
-  LibraryEditor* editor = mOpenLibraryEditors.value(lib.data());
-  if (!editor) {
-    try {
-      editor = new LibraryEditor(mWorkspace, lib);
-      connect(editor, &LibraryEditor::destroyed, this,
-              &ControlPanel::libraryEditorDestroyed);
-      mOpenLibraryEditors.insert(lib.data(), editor);
-    } catch (const Exception& e) {
-      QMessageBox::critical(this, tr("Error"), e.getMsg());
-    }
-  }
-  editor->show();
-  editor->raise();
-  editor->activateWindow();
+void ControlPanel::openLibraryEditor(const FilePath& libDir) noexcept {
+  // using library::editor::LibraryEditor;
+  // LibraryEditor* editor = mOpenLibraryEditors.value(lib.data());
+  // if (!editor) {
+  //  try {
+  //    editor = new LibraryEditor(mWorkspace, lib);
+  //    connect(editor, &LibraryEditor::destroyed, this,
+  //            &ControlPanel::libraryEditorDestroyed);
+  //    mOpenLibraryEditors.insert(lib.data(), editor);
+  //  } catch (const Exception& e) {
+  //    QMessageBox::critical(this, tr("Error"), e.getMsg());
+  //  }
+  //}
+  // editor->show();
+  // editor->raise();
+  // editor->activateWindow();
 }
 
 void ControlPanel::libraryEditorDestroyed() noexcept {
