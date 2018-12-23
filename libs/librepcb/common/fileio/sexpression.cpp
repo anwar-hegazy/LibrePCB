@@ -49,7 +49,7 @@ SExpression::SExpression(const SExpression& other) noexcept
     mFilePath(other.mFilePath) {
 }
 
-SExpression::SExpression(sexpresso::Sexp& sexp, const FilePath& filePath)
+SExpression::SExpression(sexpresso::Sexp& sexp, const QString& filePath)
   : mType(Type::List), mValue(), mFilePath(filePath) {
   if (sexp.childCount() < 1) {
     throw RuntimeError(__FILE__, __LINE__);
@@ -284,7 +284,7 @@ SExpression SExpression::createLineBreak() {
   return SExpression(Type::LineBreak, QString());
 }
 
-SExpression SExpression::parse(const QString& str, const FilePath& filePath) {
+SExpression SExpression::parse(const QString& str, const QString& filePath) {
   std::string     error;
   sexpresso::Sexp tree = sexpresso::parse(str.toStdString(), error);
   if (error.empty()) {
