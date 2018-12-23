@@ -35,6 +35,8 @@
  ******************************************************************************/
 namespace librepcb {
 
+class FileSystem;
+
 namespace library {
 class Library;
 }
@@ -305,8 +307,8 @@ public:
 
 signals:
 
-  void libraryAdded(const FilePath& libDir);
-  void libraryRemoved(const FilePath& libDir);
+  void libraryAdded();
+  void libraryRemoved();
 
 private:  // Data
   FilePath
@@ -318,6 +320,8 @@ private:  // Data
   DirectoryLock mLock;  ///< to lock the version directory (#mVersionPath)
   QScopedPointer<WorkspaceSettings>
       mWorkspaceSettings;  ///< the WorkspaceSettings object
+  QScopedPointer<FileSystem> mLocalLibrariesFileSystem;
+  QScopedPointer<FileSystem> mRemoteLibrariesFileSystem;
   QMap<QString, QSharedPointer<library::Library>>
       mLocalLibraries;  ///< all local libraries
   QMap<QString, QSharedPointer<library::Library>>

@@ -106,7 +106,7 @@ void NewElementWizardContext::createLibraryElement() {
   if (!mElementName) throw LogicError(__FILE__, __LINE__);
   if (!mElementVersion) throw LogicError(__FILE__, __LINE__);
 
-  switch (mElementType) {
+  /*switch (mElementType) {
     case NewElementWizardContext::ElementType::ComponentCategory: {
       ComponentCategory element(Uuid::createRandom(), *mElementVersion,
                                 mElementAuthor, *mElementName,
@@ -182,7 +182,7 @@ void NewElementWizardContext::createLibraryElement() {
     }
     default:
       throw LogicError(__FILE__, __LINE__);
-  }
+  }*/
 }
 
 /*******************************************************************************

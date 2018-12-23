@@ -124,13 +124,13 @@ void NewElementWizardPage_DeviceProperties::setPackage(
     try {
       FilePath fp = mContext.getWorkspace().getLibraryDb().getLatestPackage(
           *uuid);                 // can throw
-      Package package(fp, true);  // can throw
-      DevicePadSignalMapHelpers::setPads(mContext.mDevicePadSignalMap,
-                                         package.getPads().getUuidSet());
-      mUi->lblPackageName->setText(
-          *package.getNames().value(mContext.getLibLocaleOrder()));
-      mUi->lblPackageDescription->setText(
-          package.getDescriptions().value(mContext.getLibLocaleOrder()));
+      //Package package(fp, true);  // can throw
+      //DevicePadSignalMapHelpers::setPads(mContext.mDevicePadSignalMap,
+      //                                   package.getPads().getUuidSet());
+      //mUi->lblPackageName->setText(
+      //    *package.getNames().value(mContext.getLibLocaleOrder()));
+      //mUi->lblPackageDescription->setText(
+      //    package.getDescriptions().value(mContext.getLibLocaleOrder()));
     } catch (const Exception& e) {
       mUi->lblPackageName->setText(tr("ERROR:"));
       mUi->lblPackageDescription->setText(e.getMsg());

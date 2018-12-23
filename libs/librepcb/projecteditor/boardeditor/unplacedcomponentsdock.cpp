@@ -190,16 +190,16 @@ void UnplacedComponentsDock::on_cbxSelectedDevice_currentIndexChanged(
       devFp = mProjectEditor.getWorkspace().getLibraryDb().getLatestDevice(
           *deviceUuid);
     if (devFp.isValid()) {
-      const library::Device* device = new library::Device(devFp, true);
-      FilePath               pkgFp =
-          mProjectEditor.getWorkspace().getLibraryDb().getLatestPackage(
-              device->getPackageUuid());
-      if (pkgFp.isValid()) {
-        const library::Package* package = new library::Package(pkgFp, true);
-        setSelectedDeviceAndPackage(device, package);
-      } else {
-        setSelectedDeviceAndPackage(nullptr, nullptr);
-      }
+      //const library::Device* device = new library::Device(devFp, true);
+      //FilePath               pkgFp =
+      //    mProjectEditor.getWorkspace().getLibraryDb().getLatestPackage(
+      //        device->getPackageUuid());
+      //if (pkgFp.isValid()) {
+      //  const library::Package* package = new library::Package(pkgFp, true);
+      //  setSelectedDeviceAndPackage(device, package);
+      //} else {
+      //  setSelectedDeviceAndPackage(nullptr, nullptr);
+      //}
     } else {
       setSelectedDeviceAndPackage(nullptr, nullptr);
     }

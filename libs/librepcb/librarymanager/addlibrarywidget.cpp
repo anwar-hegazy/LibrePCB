@@ -203,7 +203,7 @@ void AddLibraryWidget::createLocalLibraryButtonClicked() noexcept {
 
   try {
     // create the new library
-    QScopedPointer<Library> lib(new Library(Uuid::createRandom(), *version,
+    /*QScopedPointer<Library> lib(new Library(Uuid::createRandom(), *version,
                                             author, ElementName(name), desc,
                                             QString("")));  // can throw
     lib->setUrl(url);
@@ -277,7 +277,7 @@ void AddLibraryWidget::createLocalLibraryButtonClicked() noexcept {
     mUi->edtLocalUrl->clear();
     mUi->cbxLocalCc0License->setChecked(false);
     mUi->edtLocalDirectory->clear();
-    emit libraryAdded(directory, true);
+    emit libraryAdded(directory, true);*/
   } catch (Exception& e) {
     QMessageBox::critical(this, tr("Error"), e.getMsg());
   }

@@ -64,7 +64,7 @@ LibraryEditor::LibraryEditor(workspace::Workspace&   ws,
     mLibrary(lib),
     mUi(new Ui::LibraryEditor),
     mCurrentEditorWidget(nullptr),
-    mLock(lib->getFilePath()) {
+    mLock(/*lib->getFilePath()*/) {
   mUi->setupUi(this);
   connect(mUi->actionClose, &QAction::triggered, this, &LibraryEditor::close);
   connect(mUi->actionNew, &QAction::triggered, this,
@@ -112,7 +112,7 @@ LibraryEditor::LibraryEditor(workspace::Workspace&   ws,
   const QStringList localeOrder =
       mWorkspace.getSettings().getLibLocaleOrder().getLocaleOrder();
   QString libName = *mLibrary->getNames().value(localeOrder);
-  if (mLibrary->isOpenedReadOnly()) libName.append(tr(" [Read-Only]"));
+  //if (mLibrary->isOpenedReadOnly()) libName.append(tr(" [Read-Only]"));
   setWindowTitle(QString(tr("%1 - LibrePCB Library Editor")).arg(libName));
   setWindowIcon(mLibrary->getIconAsPixmap());
 
@@ -132,7 +132,7 @@ LibraryEditor::LibraryEditor(workspace::Workspace&   ws,
   // if the library was opened in read-only mode, we guess that it's a remote
   // library and thus show a warning that all modifications are lost after the
   // next update
-  mUi->lblRemoteLibraryWarning->setVisible(mLibrary->isOpenedReadOnly());
+  //mUi->lblRemoteLibraryWarning->setVisible(mLibrary->isOpenedReadOnly());
 
   // create the undo stack action group
   mUndoStackActionGroup.reset(new UndoStackActionGroup(
@@ -321,7 +321,7 @@ bool LibraryEditor::closeAndDestroy(bool askForSave) noexcept {
  *  Public Slots
  ******************************************************************************/
 
-void LibraryEditor::closeTabIfOpen(const FilePath& fp) noexcept {
+void LibraryEditor::closeTabIfOpen(const QString& fp) noexcept {
   for (int i = 0; i < mUi->tabWidget->count(); i++) {
     EditorWidgetBase* widget =
         dynamic_cast<EditorWidgetBase*>(mUi->tabWidget->widget(i));
@@ -340,7 +340,7 @@ void LibraryEditor::closeTabIfOpen(const FilePath& fp) noexcept {
 
 void LibraryEditor::newElementTriggered() noexcept {
   NewElementWizard wizard(mWorkspace, *mLibrary, *this, this);
-  if (wizard.exec() == QDialog::Accepted) {
+  /*if (wizard.exec() == QDialog::Accepted) {
     FilePath fp = wizard.getContext().getOutputDirectory();
     switch (wizard.getContext().mElementType) {
       case NewElementWizardContext::ElementType::ComponentCategory:
@@ -367,7 +367,7 @@ void LibraryEditor::newElementTriggered() noexcept {
         break;
     }
     mWorkspace.getLibraryDb().startLibraryRescan();
-  }
+  }*/
 }
 
 void LibraryEditor::saveTriggered() noexcept {
@@ -376,8 +376,8 @@ void LibraryEditor::saveTriggered() noexcept {
 
 void LibraryEditor::showElementInFileExplorerTriggered() noexcept {
   if (!mCurrentEditorWidget) return;
-  FilePath fp = mCurrentEditorWidget->getFilePath();
-  QDesktopServices::openUrl(fp.toQUrl());
+  QString fp = mCurrentEditorWidget->getFilePath();
+  QDesktopServices::openUrl(QUrl::fromLocalFile(fp));
 }
 
 void LibraryEditor::rotateCwTriggered() noexcept {
@@ -412,35 +412,34 @@ void LibraryEditor::editGridPropertiesTriggered() noexcept {
   if (mCurrentEditorWidget) mCurrentEditorWidget->editGridProperties();
 }
 
-void LibraryEditor::editComponentCategoryTriggered(
-    const FilePath& fp) noexcept {
+void LibraryEditor::editComponentCategoryTriggered(const QString& fp) noexcept {
   editLibraryElementTriggered<ComponentCategory, ComponentCategoryEditorWidget>(
       fp, false);
 }
 
-void LibraryEditor::editPackageCategoryTriggered(const FilePath& fp) noexcept {
+void LibraryEditor::editPackageCategoryTriggered(const QString& fp) noexcept {
   editLibraryElementTriggered<PackageCategory, PackageCategoryEditorWidget>(
       fp, false);
 }
 
-void LibraryEditor::editSymbolTriggered(const FilePath& fp) noexcept {
+void LibraryEditor::editSymbolTriggered(const QString& fp) noexcept {
   editLibraryElementTriggered<Symbol, SymbolEditorWidget>(fp, false);
 }
 
-void LibraryEditor::editPackageTriggered(const FilePath& fp) noexcept {
+void LibraryEditor::editPackageTriggered(const QString& fp) noexcept {
   editLibraryElementTriggered<Package, PackageEditorWidget>(fp, false);
 }
 
-void LibraryEditor::editComponentTriggered(const FilePath& fp) noexcept {
+void LibraryEditor::editComponentTriggered(const QString& fp) noexcept {
   editLibraryElementTriggered<Component, ComponentEditorWidget>(fp, false);
 }
 
-void LibraryEditor::editDeviceTriggered(const FilePath& fp) noexcept {
+void LibraryEditor::editDeviceTriggered(const QString& fp) noexcept {
   editLibraryElementTriggered<Device, DeviceEditorWidget>(fp, false);
 }
 
 template <typename ElementType, typename EditWidgetType>
-void LibraryEditor::editLibraryElementTriggered(const FilePath& fp,
+void LibraryEditor::editLibraryElementTriggered(const QString& fp,
                                                 bool isNewElement) noexcept {
   try {
     for (int i = 0; i < mUi->tabWidget->count(); i++) {

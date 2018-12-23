@@ -170,7 +170,7 @@ void PackageChooserDialog::updatePreview() noexcept {
 
   if (mPackageFilePath.isValid() && mLayerProvider) {
     try {
-      mPackage.reset(new Package(mPackageFilePath, true));  // can throw
+      //mPackage.reset(new Package(mPackageFilePath, true));  // can throw
       if (mPackage->getFootprints().count() > 0) {
         mGraphicsItem.reset(new FootprintPreviewGraphicsItem(
             *mLayerProvider, QStringList(), *mPackage->getFootprints().first(),

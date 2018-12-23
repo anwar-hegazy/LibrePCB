@@ -456,15 +456,15 @@ void ComponentSymbolVariantItemListEditorWidget::addItem(
     ComponentSymbolVariantItemSuffix constrainedSuffix(suffix);  // can throw
     FilePath                         fp =
         mWorkspace->getLibraryDb().getLatestSymbol(symbol);     // can throw
-    Symbol                                      sym(fp, true);  // can throw
-    std::shared_ptr<ComponentSymbolVariantItem> item(
-        new ComponentSymbolVariantItem(Uuid::createRandom(), symbol, pos, rot,
-                                       required, constrainedSuffix));
-    item->getPinSignalMap() =
-        ComponentPinSignalMapHelpers::create(sym.getPins().getUuidSet());
-    mItems->append(item);
-    updateTable();
-    emit edited();
+    //Symbol                                      sym(fp, true);  // can throw
+    //std::shared_ptr<ComponentSymbolVariantItem> item(
+    //    new ComponentSymbolVariantItem(Uuid::createRandom(), symbol, pos, rot,
+    //                                   required, constrainedSuffix));
+    //item->getPinSignalMap() =
+    //    ComponentPinSignalMapHelpers::create(sym.getPins().getUuidSet());
+    //mItems->append(item);
+    //updateTable();
+    //emit edited();
   } catch (const Exception& e) {
     QMessageBox::critical(this, tr("Could not add symbol"), e.getMsg());
   }
@@ -500,12 +500,12 @@ void ComponentSymbolVariantItemListEditorWidget::setSymbolUuid(
   try {
     FilePath fp =
         mWorkspace->getLibraryDb().getLatestSymbol(symbol);  // can throw
-    Symbol sym(fp, true);                                    // can throw
-    mItems->find(uuid)->setSymbolUuid(symbol);
-    mItems->find(uuid)->getPinSignalMap() =
-        ComponentPinSignalMapHelpers::create(sym.getPins().getUuidSet());
-    updateTable(mSelectedItem);
-    emit edited();
+    //Symbol sym(fp, true);                                    // can throw
+    //mItems->find(uuid)->setSymbolUuid(symbol);
+    //mItems->find(uuid)->getPinSignalMap() =
+    //    ComponentPinSignalMapHelpers::create(sym.getPins().getUuidSet());
+    //updateTable(mSelectedItem);
+    //emit edited();
   } catch (const Exception& e) {
     QMessageBox::critical(this, tr("Could not change symbol"), e.getMsg());
   }

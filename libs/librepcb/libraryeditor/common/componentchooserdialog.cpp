@@ -170,26 +170,26 @@ void ComponentChooserDialog::updatePreview() noexcept {
 
   if (mComponentFilePath.isValid() && mLayerProvider) {
     try {
-      mComponent.reset(new Component(mComponentFilePath, true));  // can throw
+      //mComponent.reset(new Component(mComponentFilePath, true));  // can throw
       if (mComponent && mComponent->getSymbolVariants().count() > 0) {
         const ComponentSymbolVariant& symbVar =
             *mComponent->getSymbolVariants().first();
         for (const ComponentSymbolVariantItem& item :
              symbVar.getSymbolItems()) {
           try {
-            FilePath fp = mWorkspace.getLibraryDb().getLatestSymbol(
-                item.getSymbolUuid());  // can throw
-            std::shared_ptr<Symbol> sym =
-                std::make_shared<Symbol>(fp, true);  // can throw
-            mSymbols.append(sym);
-            std::shared_ptr<SymbolPreviewGraphicsItem> graphicsItem =
-                std::make_shared<SymbolPreviewGraphicsItem>(
-                    *mLayerProvider, QStringList(), *sym, mComponent.data(),
-                    symbVar.getUuid(), item.getUuid());
-            graphicsItem->setPos(item.getSymbolPosition().toPxQPointF());
-            graphicsItem->setRotation(-item.getSymbolRotation().toDeg());
-            mGraphicsScene->addItem(*graphicsItem);
-            mSymbolGraphicsItems.append(graphicsItem);
+            //FilePath fp = mWorkspace.getLibraryDb().getLatestSymbol(
+            //    item.getSymbolUuid());  // can throw
+            //std::shared_ptr<Symbol> sym =
+            //    std::make_shared<Symbol>(fp, true);  // can throw
+            //mSymbols.append(sym);
+            //std::shared_ptr<SymbolPreviewGraphicsItem> graphicsItem =
+            //    std::make_shared<SymbolPreviewGraphicsItem>(
+            //        *mLayerProvider, QStringList(), *sym, mComponent.data(),
+            //        symbVar.getUuid(), item.getUuid());
+            //graphicsItem->setPos(item.getSymbolPosition().toPxQPointF());
+            //graphicsItem->setRotation(-item.getSymbolRotation().toDeg());
+            //mGraphicsScene->addItem(*graphicsItem);
+            //mSymbolGraphicsItems.append(graphicsItem);
           } catch (const Exception& e) {
             // what could we do here? ;)
           }

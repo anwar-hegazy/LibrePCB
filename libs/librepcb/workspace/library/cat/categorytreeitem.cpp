@@ -53,7 +53,7 @@ CategoryTreeItem<ElementType>::CategoryTreeItem(
   try {
     if (mUuid) {
       FilePath fp = getLatestCategory(library);
-      if (fp.isValid()) mCategory.reset(new ElementType(fp, true));
+      //if (fp.isValid()) mCategory.reset(new ElementType(fp, true));
     }
 
     if (mUuid || (!mParent)) {

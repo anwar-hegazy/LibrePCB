@@ -320,7 +320,7 @@ void NewElementWizardPage_CopyFrom::setSelectedCategory(
 
 void NewElementWizardPage_CopyFrom::setSelectedElement(
     const FilePath& fp) noexcept {
-  if (mSelectedElement && (mSelectedElement->getFilePath() == fp)) return;
+  /*if (mSelectedElement && (mSelectedElement->getFilePath() == fp)) return;
 
   mSelectedElement.reset();
 
@@ -361,7 +361,7 @@ void NewElementWizardPage_CopyFrom::setSelectedElement(
       // what could we do here?
     }
   }
-  emit completeChanged();
+  emit completeChanged();*/
 }
 
 void NewElementWizardPage_CopyFrom::setCategoryTreeModel(

@@ -183,7 +183,7 @@ bool ProjectLibrary::save(bool toOriginal, QStringList& errors) noexcept {
         // Avoid copy failure caused by already existing directory.
         FileUtils::removeDirRecursively(dir);
       }
-      FileUtils::copyDirRecursively(element->getFilePath(), dir);  // can throw
+      //FileUtils::copyDirRecursively(element->getFilePath(), dir);  // can throw
       savedElements.insert(element);
     } catch (const Exception& e) {
       success = false;
@@ -221,17 +221,17 @@ void ProjectLibrary::loadElements(const FilePath&            directory,
     FilePath subdirPath(directory.getPathTo(dirname));
 
     // check if directory is a valid library element
-    if (!LibraryBaseElement::isValidElementDirectory<ElementType>(subdirPath)) {
-      if (subdirPath.isEmptyDir()) {
-        qInfo() << "Empty library element directory will be removed:"
-                << subdirPath.toNative();
-        QDir(subdirPath.toStr()).removeRecursively();
-      } else {
-        qWarning() << "Found an invalid directory in the library:"
-                   << subdirPath.toNative();
-      }
-      continue;
-    }
+    //if (!LibraryBaseElement::isValidElementDirectory<ElementType>(subdirPath)) {
+    //  if (subdirPath.isEmptyDir()) {
+    //    qInfo() << "Empty library element directory will be removed:"
+    //            << subdirPath.toNative();
+    //    QDir(subdirPath.toStr()).removeRecursively();
+    //  } else {
+    //    qWarning() << "Found an invalid directory in the library:"
+    //               << subdirPath.toNative();
+    //  }
+    //  continue;
+    //}
 
     // Copy element to temporary directory to decouple it from the project
     // library.
@@ -240,19 +240,19 @@ void ProjectLibrary::loadElements(const FilePath&            directory,
     FileUtils::copyDirRecursively(subdirPath, elementDir);  // can throw
 
     // load the library element
-    ElementType* element = new ElementType(elementDir, false);  // can throw
-    if (elementList.contains(element->getUuid())) {
-      throw RuntimeError(
-          __FILE__, __LINE__,
-          QString(tr("There are multiple library elements with the same "
-                     "UUID in the directory \"%1\""))
-              .arg(subdirPath.toNative()));
-    }
-
-    // everything is ok -> update members
-    elementList.insert(element->getUuid(), element);
-    mAllElements.insert(element);
-    mLoadedElements.insert(element);
+    //ElementType* element = new ElementType(elementDir, false);  // can throw
+    //if (elementList.contains(element->getUuid())) {
+    //  throw RuntimeError(
+    //      __FILE__, __LINE__,
+    //      QString(tr("There are multiple library elements with the same "
+    //                 "UUID in the directory \"%1\""))
+    //          .arg(subdirPath.toNative()));
+    //}
+    //
+    //// everything is ok -> update members
+    //elementList.insert(element->getUuid(), element);
+    //mAllElements.insert(element);
+    //mLoadedElements.insert(element);
   }
 
   qDebug() << "successfully loaded" << elementList.count() << qPrintable(type);
@@ -269,8 +269,8 @@ void ProjectLibrary::addElement(ElementType&               element,
   }
   if (!mAllElements.contains(&element)) {
     // copy from workspace *immediately* to freeze/backup their state
-    element.saveIntoParentDirectory(
-        mTmpDir.getPathTo(QString::number(qrand())));  // can throw
+    //element.saveIntoParentDirectory(
+    //    mTmpDir.getPathTo(QString::number(qrand())));  // can throw
     mAllElements.insert(&element);
   }
   elementList.insert(element.getUuid(), &element);

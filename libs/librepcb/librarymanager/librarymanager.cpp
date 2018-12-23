@@ -174,11 +174,11 @@ void LibraryManager::libraryAddedSlot(const FilePath& libDir,
       Q_ASSERT(item);
       LibraryListWidgetItem* widget = dynamic_cast<LibraryListWidgetItem*>(
           mUi->lstLibraries->itemWidget(item));
-      if (widget && widget->getLibrary() &&
-          widget->getLibrary()->getFilePath() == libDir) {
-        mUi->lstLibraries->setCurrentItem(item);
-        break;
-      }
+      //if (widget && widget->getLibrary() &&
+      //    widget->getLibrary()->getFilePath() == libDir) {
+      //  mUi->lstLibraries->setCurrentItem(item);
+      //  break;
+      //}
     }
   }
 }

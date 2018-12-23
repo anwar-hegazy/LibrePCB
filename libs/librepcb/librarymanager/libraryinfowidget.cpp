@@ -95,11 +95,11 @@ LibraryInfoWidget::LibraryInfoWidget(workspace::Workspace&   ws,
     dependencies.append(line);
   }
   mUi->lblDependencies->setText(dependencies);
-  mUi->lblDirectory->setText(
-      QString("<a href='%1'>%2</a>")
-          .arg(lib->getFilePath().toQUrl().toLocalFile(),
-               lib->getFilePath().toRelative(ws.getLibrariesPath())));
-  mUi->lblDirectory->setToolTip(lib->getFilePath().toNative());
+  //mUi->lblDirectory->setText(
+  //    QString("<a href='%1'>%2</a>")
+  //        .arg(lib->getFilePath().toQUrl().toLocalFile(),
+  //             lib->getFilePath().toRelative(ws.getLibrariesPath())));
+  //mUi->lblDirectory->setToolTip(lib->getFilePath().toNative());
 }
 
 LibraryInfoWidget::~LibraryInfoWidget() noexcept {
@@ -114,7 +114,7 @@ void LibraryInfoWidget::btnOpenLibraryEditorClicked() noexcept {
 }
 
 void LibraryInfoWidget::btnRemoveLibraryClicked() noexcept {
-  QString title = tr("Remove Library");
+  /*QString title = tr("Remove Library");
   QString text =
       QString(tr("Attention! This will remove the whole library directory:"
                  "\n\n%1\n\nAre you really sure to remove \"%2\"?"))
@@ -136,11 +136,11 @@ void LibraryInfoWidget::btnRemoveLibraryClicked() noexcept {
     } catch (const Exception& e) {
       QMessageBox::critical(this, tr("Error"), e.getMsg());
     }
-  }
+  }*/
 }
 
 bool LibraryInfoWidget::isRemoteLibrary() const noexcept {
-  return mLib->isOpenedReadOnly();
+  //return mLib->isOpenedReadOnly();
 }
 
 /*******************************************************************************

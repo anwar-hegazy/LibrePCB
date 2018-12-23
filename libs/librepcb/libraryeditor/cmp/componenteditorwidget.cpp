@@ -49,7 +49,7 @@ namespace editor {
  ******************************************************************************/
 
 ComponentEditorWidget::ComponentEditorWidget(const Context&  context,
-                                             const FilePath& fp,
+                                             const QString& fp,
                                              QWidget*        parent)
   : EditorWidgetBase(context, fp, parent), mUi(new Ui::ComponentEditorWidget) {
   mUi->setupUi(this);
@@ -68,7 +68,7 @@ ComponentEditorWidget::ComponentEditorWidget(const Context&  context,
                              mCategoriesEditorWidget.data());
 
   // Load element.
-  mComponent.reset(new Component(fp, false));  // can throw
+  //mComponent.reset(new Component(fp, false));  // can throw
   mUi->signalEditorWidget->setReferences(mUndoStack.data(),
                                          &mComponent->getSignals());
   mUi->symbolVariantsEditorWidget->setReferences(

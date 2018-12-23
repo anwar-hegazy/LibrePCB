@@ -47,7 +47,7 @@ namespace editor {
  ******************************************************************************/
 
 PackageCategoryEditorWidget::PackageCategoryEditorWidget(const Context& context,
-                                                         const FilePath& fp,
+                                                         const QString& fp,
                                                          QWidget*        parent)
   : EditorWidgetBase(context, fp, parent),
     mUi(new Ui::PackageCategoryEditorWidget) {
@@ -60,7 +60,7 @@ PackageCategoryEditorWidget::PackageCategoryEditorWidget(const Context& context,
           &PackageCategoryEditorWidget::btnResetParentCategoryClicked);
 
   // Load element.
-  mCategory.reset(new PackageCategory(fp, false));  // can throw
+  //mCategory.reset(new PackageCategory(fp, false));  // can throw
   updateMetadata();
 
   // Reload metadata on undo stack state changes.

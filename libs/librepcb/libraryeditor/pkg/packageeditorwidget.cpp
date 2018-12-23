@@ -57,7 +57,7 @@ namespace editor {
  ******************************************************************************/
 
 PackageEditorWidget::PackageEditorWidget(const Context&  context,
-                                         const FilePath& fp, QWidget* parent)
+                                         const QString& fp, QWidget* parent)
   : EditorWidgetBase(context, fp, parent),
     mUi(new Ui::PackageEditorWidget),
     mGraphicsScene(new GraphicsScene()) {
@@ -85,7 +85,7 @@ PackageEditorWidget::PackageEditorWidget(const Context&  context,
                              mCategoriesEditorWidget.data());
 
   // Load element.
-  mPackage.reset(new Package(fp, false));  // can throw
+  //mPackage.reset(new Package(fp, false));  // can throw
   updateMetadata();
 
   // Setup footprint list editor widget.

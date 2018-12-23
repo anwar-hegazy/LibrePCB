@@ -73,18 +73,18 @@ SymbolInstancePropertiesDialog::SymbolInstancePropertiesDialog(
 
   // Component Library Element Attributes
   QString htmlLink("<a href=\"%1\">%2<a>");
-  mUi->lblCompLibName->setText(htmlLink.arg(
-      mComponentInstance.getLibComponent().getFilePath().toQUrl().toString(),
-      *mComponentInstance.getLibComponent().getNames().value(localeOrder)));
-  mUi->lblCompLibName->setToolTip(
-      mComponentInstance.getLibComponent().getDescriptions().value(
-          localeOrder) +
-      "<p>" + mComponentInstance.getLibComponent().getFilePath().toNative());
-  mUi->lblSymbVarName->setText(
-      *mComponentInstance.getSymbolVariant().getNames().value(localeOrder));
-  mUi->lblSymbVarName->setToolTip(
-      mComponentInstance.getSymbolVariant().getDescriptions().value(
-          localeOrder));
+  //mUi->lblCompLibName->setText(htmlLink.arg(
+  //    mComponentInstance.getLibComponent().getFilePath().toQUrl().toString(),
+  //    *mComponentInstance.getLibComponent().getNames().value(localeOrder)));
+  //mUi->lblCompLibName->setToolTip(
+  //    mComponentInstance.getLibComponent().getDescriptions().value(
+  //        localeOrder) +
+  //    "<p>" + mComponentInstance.getLibComponent().getFilePath().toNative());
+  //mUi->lblSymbVarName->setText(
+  //    *mComponentInstance.getSymbolVariant().getNames().value(localeOrder));
+  //mUi->lblSymbVarName->setToolTip(
+  //    mComponentInstance.getSymbolVariant().getDescriptions().value(
+  //        localeOrder));
 
   // Symbol Instance Attributes
   mUi->lblSymbInstName->setText(mSymbol.getName());
@@ -94,12 +94,12 @@ SymbolInstancePropertiesDialog::SymbolInstancePropertiesDialog(
   mUi->cbxMirror->setChecked(mSymbol.getMirrored());
 
   // Symbol Library Element Attributes
-  mUi->lblSymbLibName->setText(
-      htmlLink.arg(mSymbol.getLibSymbol().getFilePath().toQUrl().toString(),
-                   *mSymbol.getLibSymbol().getNames().value(localeOrder)));
-  mUi->lblSymbLibName->setToolTip(
-      mSymbol.getLibSymbol().getDescriptions().value(localeOrder) + "<p>" +
-      mSymbol.getLibSymbol().getFilePath().toNative());
+  //mUi->lblSymbLibName->setText(
+  //    htmlLink.arg(mSymbol.getLibSymbol().getFilePath().toQUrl().toString(),
+  //                 *mSymbol.getLibSymbol().getNames().value(localeOrder)));
+  //mUi->lblSymbLibName->setToolTip(
+  //    mSymbol.getLibSymbol().getDescriptions().value(localeOrder) + "<p>" +
+  //    mSymbol.getLibSymbol().getFilePath().toNative());
 
   // set focus to component instance name
   mUi->edtCompInstName->selectAll();

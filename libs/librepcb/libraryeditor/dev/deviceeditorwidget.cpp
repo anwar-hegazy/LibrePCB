@@ -59,7 +59,7 @@ namespace editor {
  ******************************************************************************/
 
 DeviceEditorWidget::DeviceEditorWidget(const Context&  context,
-                                       const FilePath& fp, QWidget* parent)
+                                       const QString& fp, QWidget* parent)
   : EditorWidgetBase(context, fp, parent), mUi(new Ui::DeviceEditorWidget) {
   mUi->setupUi(this);
   mUi->lstMessages->setHandler(this);
@@ -85,7 +85,7 @@ DeviceEditorWidget::DeviceEditorWidget(const Context&  context,
                              mCategoriesEditorWidget.data());
 
   // Load element.
-  mDevice.reset(new Device(fp, false));  // can throw
+  //mDevice.reset(new Device(fp, false));  // can throw
   mUi->padSignalMapEditorWidget->setReferences(mUndoStack.data(),
                                                &mDevice->getPadSignalMap());
   updateDeviceComponentUuid(mDevice->getComponentUuid());
@@ -233,24 +233,24 @@ void DeviceEditorWidget::btnChooseComponentClicked() noexcept {
         if (!fp.isValid()) {
           throw RuntimeError(__FILE__, __LINE__, tr("Component not found!"));
         }
-        Component component(fp, true);  // can throw
-
-        // edit device
-        QScopedPointer<UndoCommandGroup> cmdGroup(
-            new UndoCommandGroup(tr("Change component")));
-        QScopedPointer<CmdDeviceEdit> cmdDevEdit(new CmdDeviceEdit(*mDevice));
-        cmdDevEdit->setComponentUuid(*cmpUuid);
-        cmdGroup->appendChild(cmdDevEdit.take());
-        for (DevicePadSignalMapItem& item : mDevice->getPadSignalMap()) {
-          tl::optional<Uuid> signalUuid = item.getSignalUuid();
-          if (!signalUuid || !component.getSignals().contains(*signalUuid)) {
-            QScopedPointer<CmdDevicePadSignalMapItemEdit> cmdItem(
-                new CmdDevicePadSignalMapItemEdit(item));
-            cmdItem->setSignalUuid(tl::nullopt);
-            cmdGroup->appendChild(cmdItem.take());
-          }
-        }
-        mUndoStack->execCmd(cmdGroup.take());
+        //Component component(fp, true);  // can throw
+        //
+        //// edit device
+        //QScopedPointer<UndoCommandGroup> cmdGroup(
+        //    new UndoCommandGroup(tr("Change component")));
+        //QScopedPointer<CmdDeviceEdit> cmdDevEdit(new CmdDeviceEdit(*mDevice));
+        //cmdDevEdit->setComponentUuid(*cmpUuid);
+        //cmdGroup->appendChild(cmdDevEdit.take());
+        //for (DevicePadSignalMapItem& item : mDevice->getPadSignalMap()) {
+        //  tl::optional<Uuid> signalUuid = item.getSignalUuid();
+        //  if (!signalUuid || !component.getSignals().contains(*signalUuid)) {
+        //    QScopedPointer<CmdDevicePadSignalMapItemEdit> cmdItem(
+        //        new CmdDevicePadSignalMapItemEdit(item));
+        //    cmdItem->setSignalUuid(tl::nullopt);
+        //    cmdGroup->appendChild(cmdItem.take());
+        //  }
+        //}
+        //mUndoStack->execCmd(cmdGroup.take());
       } catch (const Exception& e) {
         QMessageBox::critical(this, tr("Could not set component"), e.getMsg());
       }
@@ -271,29 +271,29 @@ void DeviceEditorWidget::btnChoosePackageClicked() noexcept {
         if (!fp.isValid()) {
           throw RuntimeError(__FILE__, __LINE__, tr("Package not found!"));
         }
-        Package    package(fp, true);  // can throw
-        QSet<Uuid> pads = package.getPads().getUuidSet();
-
-        // edit device
-        QScopedPointer<UndoCommandGroup> cmdGroup(
-            new UndoCommandGroup(tr("Change package")));
-        QScopedPointer<CmdDeviceEdit> cmdDevEdit(new CmdDeviceEdit(*mDevice));
-        cmdDevEdit->setPackageUuid(*pkgUuid);
-        cmdGroup->appendChild(cmdDevEdit.take());
-        for (const DevicePadSignalMapItem& item : mDevice->getPadSignalMap()) {
-          if (!pads.contains(item.getPadUuid())) {
-            cmdGroup->appendChild(new CmdDevicePadSignalMapItemRemove(
-                mDevice->getPadSignalMap(), &item));
-          }
-        }
-        foreach (const Uuid& pad,
-                 pads - mDevice->getPadSignalMap().getUuidSet()) {
-          cmdGroup->appendChild(new CmdDevicePadSignalMapItemInsert(
-              mDevice->getPadSignalMap(),
-              std::make_shared<DevicePadSignalMapItem>(pad, tl::nullopt)));
-        }
-        mUndoStack->execCmd(cmdGroup.take());
-        Q_ASSERT(mDevice->getPadSignalMap().getUuidSet() == pads);
+        //Package    package(fp, true);  // can throw
+        //QSet<Uuid> pads = package.getPads().getUuidSet();
+        //
+        //// edit device
+        //QScopedPointer<UndoCommandGroup> cmdGroup(
+        //    new UndoCommandGroup(tr("Change package")));
+        //QScopedPointer<CmdDeviceEdit> cmdDevEdit(new CmdDeviceEdit(*mDevice));
+        //cmdDevEdit->setPackageUuid(*pkgUuid);
+        //cmdGroup->appendChild(cmdDevEdit.take());
+        //for (const DevicePadSignalMapItem& item : mDevice->getPadSignalMap()) {
+        //  if (!pads.contains(item.getPadUuid())) {
+        //    cmdGroup->appendChild(new CmdDevicePadSignalMapItemRemove(
+        //        mDevice->getPadSignalMap(), &item));
+        //  }
+        //}
+        //foreach (const Uuid& pad,
+        //         pads - mDevice->getPadSignalMap().getUuidSet()) {
+        //  cmdGroup->appendChild(new CmdDevicePadSignalMapItemInsert(
+        //      mDevice->getPadSignalMap(),
+        //      std::make_shared<DevicePadSignalMapItem>(pad, tl::nullopt)));
+        //}
+        //mUndoStack->execCmd(cmdGroup.take());
+        //Q_ASSERT(mDevice->getPadSignalMap().getUuidSet() == pads);
       } catch (const Exception& e) {
         QMessageBox::critical(this, tr("Could not set package"), e.getMsg());
       }
@@ -310,7 +310,7 @@ void DeviceEditorWidget::updateDeviceComponentUuid(const Uuid& uuid) noexcept {
     if (!fp.isValid()) {
       throw RuntimeError(__FILE__, __LINE__, tr("Component not found!"));
     }
-    mComponent.reset(new Component(fp, true));  // can throw
+    //mComponent.reset(new Component(fp, true));  // can throw
     mUi->padSignalMapEditorWidget->setSignalList(mComponent->getSignals());
     mUi->lblComponentName->setText(
         *mComponent->getNames().value(getLibLocaleOrder()));
@@ -332,19 +332,19 @@ void DeviceEditorWidget::updateComponentPreview() noexcept {
         *mComponent->getSymbolVariants().first();
     for (const ComponentSymbolVariantItem& item : symbVar.getSymbolItems()) {
       try {
-        FilePath fp = mContext.workspace.getLibraryDb().getLatestSymbol(
-            item.getSymbolUuid());  // can throw
-        std::shared_ptr<Symbol> sym =
-            std::make_shared<Symbol>(fp, true);  // can throw
-        mSymbols.append(sym);
-        std::shared_ptr<SymbolPreviewGraphicsItem> graphicsItem =
-            std::make_shared<SymbolPreviewGraphicsItem>(
-                *mGraphicsLayerProvider, QStringList(), *sym, mComponent.data(),
-                symbVar.getUuid(), item.getUuid());
-        graphicsItem->setPos(item.getSymbolPosition().toPxQPointF());
-        graphicsItem->setRotation(-item.getSymbolRotation().toDeg());
-        mComponentGraphicsScene->addItem(*graphicsItem);
-        mSymbolGraphicsItems.append(graphicsItem);
+        //FilePath fp = mContext.workspace.getLibraryDb().getLatestSymbol(
+        //    item.getSymbolUuid());  // can throw
+        //std::shared_ptr<Symbol> sym =
+        //    std::make_shared<Symbol>(fp, true);  // can throw
+        //mSymbols.append(sym);
+        //std::shared_ptr<SymbolPreviewGraphicsItem> graphicsItem =
+        //    std::make_shared<SymbolPreviewGraphicsItem>(
+        //        *mGraphicsLayerProvider, QStringList(), *sym, mComponent.data(),
+        //        symbVar.getUuid(), item.getUuid());
+        //graphicsItem->setPos(item.getSymbolPosition().toPxQPointF());
+        //graphicsItem->setRotation(-item.getSymbolRotation().toDeg());
+        //mComponentGraphicsScene->addItem(*graphicsItem);
+        //mSymbolGraphicsItems.append(graphicsItem);
       } catch (const Exception& e) {
         // what could we do here? ;)
       }
@@ -361,7 +361,7 @@ void DeviceEditorWidget::updateDevicePackageUuid(const Uuid& uuid) noexcept {
     if (!fp.isValid()) {
       throw RuntimeError(__FILE__, __LINE__, tr("Package not found!"));
     }
-    mPackage.reset(new Package(fp, true));  // can throw
+    //mPackage.reset(new Package(fp, true));  // can throw
     mUi->padSignalMapEditorWidget->setPadList(mPackage->getPads());
     mUi->lblPackageName->setText(
         *mPackage->getNames().value(getLibLocaleOrder()));

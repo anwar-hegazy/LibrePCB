@@ -62,7 +62,7 @@ namespace editor {
  ******************************************************************************/
 
 SymbolEditorWidget::SymbolEditorWidget(const Context&  context,
-                                       const FilePath& fp, QWidget* parent)
+                                       const QString& fp, QWidget* parent)
   : EditorWidgetBase(context, fp, parent),
     mUi(new Ui::SymbolEditorWidget),
     mGraphicsScene(new GraphicsScene()) {
@@ -87,7 +87,7 @@ SymbolEditorWidget::SymbolEditorWidget(const Context&  context,
                              mCategoriesEditorWidget.data());
 
   // Load element.
-  mSymbol.reset(new Symbol(fp, false));  // can throw
+  //mSymbol.reset(new Symbol(fp, false));  // can throw
   updateMetadata();
 
   // Show "interface broken" warning when related properties are modified.

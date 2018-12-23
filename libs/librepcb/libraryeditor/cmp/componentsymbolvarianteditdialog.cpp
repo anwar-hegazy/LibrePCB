@@ -109,17 +109,17 @@ void ComponentSymbolVariantEditDialog::updateGraphicsItems() noexcept {
   mSymbols.clear();
   for (const ComponentSymbolVariantItem& item : mSymbVar.getSymbolItems()) {
     try {
-      FilePath fp = mWorkspace.getLibraryDb().getLatestSymbol(
-          item.getSymbolUuid());  // can throw
-      std::shared_ptr<Symbol> sym =
-          std::make_shared<Symbol>(fp, true);  // can throw
-      mSymbols.append(sym);
-      std::shared_ptr<SymbolGraphicsItem> graphicsItem =
-          std::make_shared<SymbolGraphicsItem>(*sym, *mGraphicsLayerProvider);
-      graphicsItem->setPosition(item.getSymbolPosition());
-      graphicsItem->setRotation(item.getSymbolRotation());
-      mGraphicsScene->addItem(*graphicsItem);
-      mGraphicsItems.append(graphicsItem);
+      //FilePath fp = mWorkspace.getLibraryDb().getLatestSymbol(
+      //    item.getSymbolUuid());  // can throw
+      //std::shared_ptr<Symbol> sym =
+      //    std::make_shared<Symbol>(fp, true);  // can throw
+      //mSymbols.append(sym);
+      //std::shared_ptr<SymbolGraphicsItem> graphicsItem =
+      //    std::make_shared<SymbolGraphicsItem>(*sym, *mGraphicsLayerProvider);
+      //graphicsItem->setPosition(item.getSymbolPosition());
+      //graphicsItem->setRotation(item.getSymbolRotation());
+      //mGraphicsScene->addItem(*graphicsItem);
+      //mGraphicsItems.append(graphicsItem);
     } catch (const Exception& e) {
       // what could we do here? ;)
     }

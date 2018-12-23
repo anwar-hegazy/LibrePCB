@@ -66,8 +66,8 @@ LibraryListWidgetItem::LibraryListWidgetItem(
     mUi->lblLibraryName->setText(*lib->getNames().value(localeOrder));
     mUi->lblLibraryDescription->setText(
         lib->getDescriptions().value(localeOrder));
-    mUi->lblLibraryUrl->setText(
-        lib->getFilePath().toRelative(ws.getLibrariesPath()));
+    //mUi->lblLibraryUrl->setText(
+    //    lib->getFilePath().toRelative(ws.getLibrariesPath()));
   } else {
     QPixmap image(":/img/actions/add.png");
     mUi->lblIcon->setPixmap(image.scaled(
@@ -95,7 +95,7 @@ QString LibraryListWidgetItem::getName() const noexcept {
 }
 
 bool LibraryListWidgetItem::isRemoteLibrary() const noexcept {
-  return mLib ? mLib->isOpenedReadOnly() : false;
+  //return mLib ? mLib->isOpenedReadOnly() : false;
 }
 
 /*******************************************************************************

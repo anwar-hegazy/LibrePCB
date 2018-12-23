@@ -80,11 +80,11 @@ NewElementWizardPage_ComponentSignals::getPinNames(const Uuid&    symbol,
   try {
     FilePath fp = mContext.getWorkspace().getLibraryDb().getLatestSymbol(
         symbol);           // can throw
-    Symbol sym(fp, true);  // can throw
-    for (const SymbolPin& pin : sym.getPins()) {
-      names.insert(pin.getUuid(),
-                   CircuitIdentifier(suffix % pin.getName()));  // can throw
-    }
+    //Symbol sym(fp, true);  // can throw
+    //for (const SymbolPin& pin : sym.getPins()) {
+    //  names.insert(pin.getUuid(),
+    //               CircuitIdentifier(suffix % pin.getName()));  // can throw
+    //}
   } catch (const Exception& e) {
     // TODO: what could we do here?
   }

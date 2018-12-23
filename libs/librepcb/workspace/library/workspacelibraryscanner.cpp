@@ -177,8 +177,8 @@ int WorkspaceLibraryScanner::addLibraryToDb(
       "INSERT INTO libraries "
       "(filepath, uuid, version) VALUES "
       "(:filepath, :uuid, :version)");
-  query.bindValue(":filepath",
-                  lib->getFilePath().toRelative(mWorkspace.getLibrariesPath()));
+  //query.bindValue(":filepath",
+  //                lib->getFilePath().toRelative(mWorkspace.getLibrariesPath()));
   query.bindValue(":uuid", lib->getUuid().toStr());
   query.bindValue(":version", lib->getVersion().toStr());
   int id = db.insert(query);
@@ -201,12 +201,12 @@ int WorkspaceLibraryScanner::addLibraryToDb(
 
 template <typename ElementType>
 int WorkspaceLibraryScanner::addCategoriesToDb(SQLiteDatabase&        db,
-                                               const QList<FilePath>& dirs,
+                                               const QList<FileSystemRef>& dirs,
                                                const QString&         table,
                                                const QString&         idColumn,
                                                int                    libId) {
   int count = 0;
-  foreach (const FilePath& filepath, dirs) {
+  /*foreach (const FilePath& filepath, dirs) {
     if (mAbort) break;
     try {
       ElementType element(filepath, true);  // can throw
@@ -247,18 +247,18 @@ int WorkspaceLibraryScanner::addCategoriesToDb(SQLiteDatabase&        db,
     } catch (const Exception& e) {
       qWarning() << "Failed to open library element:" << filepath.toNative();
     }
-  }
+  }*/
   return count;
 }
 
 template <typename ElementType>
 int WorkspaceLibraryScanner::addElementsToDb(SQLiteDatabase&        db,
-                                             const QList<FilePath>& dirs,
+                                             const QList<FileSystemRef>& dirs,
                                              const QString&         table,
                                              const QString&         idColumn,
                                              int                    libId) {
   int count = 0;
-  foreach (const FilePath& filepath, dirs) {
+  /*foreach (const FilePath& filepath, dirs) {
     if (mAbort) break;
     try {
       ElementType element(filepath, true);  // can throw
@@ -307,17 +307,17 @@ int WorkspaceLibraryScanner::addElementsToDb(SQLiteDatabase&        db,
     } catch (const Exception& e) {
       qWarning() << "Failed to open library element:" << filepath.toNative();
     }
-  }
+  }*/
   return count;
 }
 
 int WorkspaceLibraryScanner::addDevicesToDb(SQLiteDatabase&        db,
-                                            const QList<FilePath>& dirs,
+                                            const QList<FileSystemRef>& dirs,
                                             const QString&         table,
                                             const QString&         idColumn,
                                             int                    libId) {
   int count = 0;
-  foreach (const FilePath& filepath, dirs) {
+  /*foreach (const FilePath& filepath, dirs) {
     if (mAbort) break;
     try {
       Device    element(filepath, true);  // can throw
@@ -369,7 +369,7 @@ int WorkspaceLibraryScanner::addDevicesToDb(SQLiteDatabase&        db,
     } catch (const Exception& e) {
       qWarning() << "Failed to open library element:" << filepath.toNative();
     }
-  }
+  }*/
   return count;
 }
 

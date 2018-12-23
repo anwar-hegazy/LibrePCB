@@ -157,7 +157,7 @@ void SymbolChooserDialog::setSelectedCategory(
 }
 
 void SymbolChooserDialog::setSelectedSymbol(const FilePath& fp) noexcept {
-  if (mSelectedSymbol && (mSelectedSymbol->getFilePath() == fp)) return;
+  //if (mSelectedSymbol && (mSelectedSymbol->getFilePath() == fp)) return;
 
   mUi->lblSymbolName->setText(tr("No symbol selected"));
   mUi->lblSymbolDescription->setText("");
@@ -166,7 +166,7 @@ void SymbolChooserDialog::setSelectedSymbol(const FilePath& fp) noexcept {
 
   if (fp.isValid()) {
     try {
-      mSelectedSymbol.reset(new Symbol(fp, true));  // can throw
+      //mSelectedSymbol.reset(new Symbol(fp, true));  // can throw
       mUi->lblSymbolName->setText(
           *mSelectedSymbol->getNames().value(localeOrder()));
       mUi->lblSymbolDescription->setText(

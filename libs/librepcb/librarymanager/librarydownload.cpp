@@ -180,23 +180,23 @@ void LibraryDownload::downloadSucceeded() noexcept {
 }
 
 FilePath LibraryDownload::getPathToLibDir() noexcept {
-  if (library::Library::isValidElementDirectory<library::Library>(
-          mTempDestDir)) {
-    return mTempDestDir;
-  }
-
-  QStringList subdirs =
-      QDir(mTempDestDir.toStr()).entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-  if (subdirs.count() != 1) {
-    return FilePath();
-  }
-
-  FilePath subdir = mTempDestDir.getPathTo(subdirs.first());
-  if (library::Library::isValidElementDirectory<library::Library>(subdir)) {
-    return subdir;
-  } else {
-    return FilePath();
-  }
+  //if (library::Library::isValidElementDirectory<library::Library>(
+  //        mTempDestDir)) {
+  //  return mTempDestDir;
+  //}
+  //
+  //QStringList subdirs =
+  //    QDir(mTempDestDir.toStr()).entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+  //if (subdirs.count() != 1) {
+  //  return FilePath();
+  //}
+  //
+  //FilePath subdir = mTempDestDir.getPathTo(subdirs.first());
+  //if (library::Library::isValidElementDirectory<library::Library>(subdir)) {
+  //  return subdir;
+  //} else {
+  //  return FilePath();
+  //}
 }
 
 /*******************************************************************************

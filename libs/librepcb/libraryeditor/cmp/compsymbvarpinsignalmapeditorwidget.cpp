@@ -150,15 +150,15 @@ void CompSymbVarPinSignalMapEditorWidget::
     for (ComponentSymbolVariantItem& item : mSymbolVariant->getSymbolItems()) {
       FilePath fp = mWorkspace->getLibraryDb().getLatestSymbol(
           item.getSymbolUuid());  // can throw
-      Symbol symbol(fp, true);    // can throw
-      for (ComponentPinSignalMapItem& map : item.getPinSignalMap()) {
-        CircuitIdentifier pinName =
-            symbol.getPins().get(map.getPinUuid())->getName();
-        std::shared_ptr<const ComponentSignal> signal =
-            mSignalList->find(*pinName);
-        map.setSignalUuid(signal ? tl::make_optional(signal->getUuid())
-                                 : tl::nullopt);
-      }
+      //Symbol symbol(fp, true);    // can throw
+      //for (ComponentPinSignalMapItem& map : item.getPinSignalMap()) {
+      //  CircuitIdentifier pinName =
+      //      symbol.getPins().get(map.getPinUuid())->getName();
+      //  std::shared_ptr<const ComponentSignal> signal =
+      //      mSignalList->find(*pinName);
+      //  map.setSignalUuid(signal ? tl::make_optional(signal->getUuid())
+      //                           : tl::nullopt);
+      //}
     }
   } catch (const Exception& e) {
     QMessageBox::critical(this, tr("Error"), e.getMsg());
@@ -191,7 +191,7 @@ void CompSymbVarPinSignalMapEditorWidget::updateTable(
     try {
       FilePath fp = mWorkspace->getLibraryDb().getLatestSymbol(
           item.getSymbolUuid());           // can throw
-      symbol.reset(new Symbol(fp, true));  // can throw
+      //symbol.reset(new Symbol(fp, true));  // can throw
     } catch (const Exception& e) {
       // what could we do here?
     }

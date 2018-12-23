@@ -201,20 +201,20 @@ void AddComponentDialog::treeComponents_currentItemChanged(
       QTreeWidgetItem* cmpItem =
           current->parent() ? current->parent() : current;
       FilePath cmpFp = FilePath(cmpItem->data(0, Qt::UserRole).toString());
-      if ((!mSelectedComponent) ||
-          (mSelectedComponent->getFilePath() != cmpFp)) {
-        library::Component* component = new library::Component(cmpFp, true);
-        setSelectedComponent(component);
-      }
-      if (current->parent()) {
-        FilePath devFp = FilePath(current->data(0, Qt::UserRole).toString());
-        if ((!mSelectedDevice) || (mSelectedDevice->getFilePath() != devFp)) {
-          library::Device* device = new library::Device(devFp, true);
-          setSelectedDevice(device);
-        }
-      } else {
-        setSelectedDevice(nullptr);
-      }
+      //if ((!mSelectedComponent) ||
+      //    (mSelectedComponent->getFilePath() != cmpFp)) {
+      //  library::Component* component = new library::Component(cmpFp, true);
+      //  setSelectedComponent(component);
+      //}
+      //if (current->parent()) {
+      //  FilePath devFp = FilePath(current->data(0, Qt::UserRole).toString());
+      //  if ((!mSelectedDevice) || (mSelectedDevice->getFilePath() != devFp)) {
+      //    library::Device* device = new library::Device(devFp, true);
+      //    setSelectedDevice(device);
+      //  }
+      //} else {
+      //  setSelectedDevice(nullptr);
+      //}
     } else {
       setSelectedComponent(nullptr);
     }
@@ -413,17 +413,17 @@ void AddComponentDialog::setSelectedSymbVar(
       FilePath symbolFp =
           mWorkspace.getLibraryDb().getLatestSymbol(item.getSymbolUuid());
       if (!symbolFp.isValid()) continue;  // TODO: show warning
-      const library::Symbol* symbol =
-          new library::Symbol(symbolFp, true);  // TODO: fix memory leak...
-      library::SymbolPreviewGraphicsItem* graphicsItem =
-          new library::SymbolPreviewGraphicsItem(
-              *mGraphicsLayerProvider, localeOrder, *symbol, mSelectedComponent,
-              symbVar->getUuid(), item.getUuid());
-      graphicsItem->setPos(item.getSymbolPosition().toPxQPointF());
-      graphicsItem->setRotation(-item.getSymbolRotation().toDeg());
-      mPreviewSymbolGraphicsItems.append(graphicsItem);
-      mComponentPreviewScene->addItem(*graphicsItem);
-      mUi->viewComponent->zoomAll();
+      //const library::Symbol* symbol =
+      //    new library::Symbol(symbolFp, true);  // TODO: fix memory leak...
+      //library::SymbolPreviewGraphicsItem* graphicsItem =
+      //    new library::SymbolPreviewGraphicsItem(
+      //        *mGraphicsLayerProvider, localeOrder, *symbol, mSelectedComponent,
+      //        symbVar->getUuid(), item.getUuid());
+      //graphicsItem->setPos(item.getSymbolPosition().toPxQPointF());
+      //graphicsItem->setRotation(-item.getSymbolRotation().toDeg());
+      //mPreviewSymbolGraphicsItems.append(graphicsItem);
+      //mComponentPreviewScene->addItem(*graphicsItem);
+      //mUi->viewComponent->zoomAll();
     }
   }
 }
@@ -445,7 +445,7 @@ void AddComponentDialog::setSelectedDevice(const library::Device* dev) {
     FilePath           pkgFp       = mWorkspace.getLibraryDb().getLatestPackage(
         mSelectedDevice->getPackageUuid());
     if (pkgFp.isValid()) {
-      mSelectedPackage = new library::Package(pkgFp, true);
+      //mSelectedPackage = new library::Package(pkgFp, true);
       QString devName  = *mSelectedDevice->getNames().value(localeOrder);
       QString pkgName  = *mSelectedPackage->getNames().value(localeOrder);
       if (devName.contains(pkgName, Qt::CaseInsensitive)) {
